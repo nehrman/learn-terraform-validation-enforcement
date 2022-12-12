@@ -7,10 +7,6 @@ data "aws_availability_zones" "available" {
   }
 }
 
-data "aws_instance" "bastion" {
-  instance_id = module.network.bastion_instance_id
-}
-
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.14.0"
@@ -30,21 +26,14 @@ resource "aws_security_group" "bastion" {
   name   = "bastion_ssh"
   vpc_id = module.vpc.vpc_id
 
-/*  ingress {
+  ingress {
     from_port = 22
     to_port   = 22
     protocol  = "tcp"
     # Example CIDR
     cidr_blocks = ["192.168.0.0/16"]
   }
-*/
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
   egress {
     from_port   = 0
     to_port     = 0
